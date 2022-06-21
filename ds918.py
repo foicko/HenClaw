@@ -46,7 +46,7 @@ def get_downloadPage(_url):
     return 'https:' + ls
 
 
-def main_thread(beg=1, end=6):
+def main_thread(beg=6, end=16):
     file_name = str(datetime.datetime.now()).replace(' ', '_').replace(':', '_').split('.')[0]
     with open('total.txt', 'a+', encoding='utf-8') as f:
         f.seek(0)
