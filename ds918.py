@@ -14,14 +14,14 @@ def get_html(_url):
 
 cosplay = base_url + '/albums-index-cate-3.html'  # cosplay
 single_book = base_url + '/albums-index-cate-6.html'  # 单行本
-
+# new_url = 'https://www.wnacgfile.com/search/index.php?q=%E5%85%A8%E5%BD%A9&m=&syn=yes&f=_all&s=create_time_DESC'
 
 def get_table(begin, end):
     ls = []
     for i in range(begin, end):
-        url = base_url + '/albums-index-page-' + str(i) + '-cate-3.html'
+        url = base_url + '/albums-index-page-' + str(i) + '-cate-1.html'
         if i == 1:
-            url = base_url + '/albums-index-cate-3.html'
+            url = base_url + '/albums-index-cate-1.html'
         ls.append(get_onePage(url))
     return ls
 
@@ -46,7 +46,7 @@ def get_downloadPage(_url):
     return 'https:' + ls
 
 
-def main_thread(beg=6, end=16):
+def main_thread(beg=1, end=13):
     file_name = str(datetime.datetime.now()).replace(' ', '_').replace(':', '_').split('.')[0]
     with open('total.txt', 'a+', encoding='utf-8') as f:
         f.seek(0)
@@ -59,7 +59,7 @@ def main_thread(beg=6, end=16):
                 Made_In_Heaven = get_downloadPage(base_url + j)
                 if Made_In_Heaven in ls:
                     print('已存在')
-                    # break
+                    break
                 else:
                     print(Made_In_Heaven)
                     with open('./txts/' + file_name + '.txt', 'a+', encoding='utf-8') as fs:
@@ -69,13 +69,13 @@ def main_thread(beg=6, end=16):
                         f.write('\n')
 
 
-main_thread()
+# main_thread()
 # 以下为搜索下载
-# search_key = '摇摇乐'
-# ps = get_onePage('http://www.wnacg.org/search/?q='+search_key)
-# if len(ps) == 0:
-#     print('None')
-# for i in ps:
-#     Made_In_Heaven = get_downloadPage(base_url + i)
-#     print(Made_In_Heaven)
+search_key = '全彩'
+ps = get_onePage('http://www.wnacg.org/search/?q='+search_key)
+if len(ps) == 0:
+    print('None')
+for i in ps:
+    Made_In_Heaven = get_downloadPage(base_url + i)
+    print(Made_In_Heaven)
 print('finished!')
