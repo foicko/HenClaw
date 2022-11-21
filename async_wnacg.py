@@ -47,20 +47,26 @@ async def get_one_Page(_url):
 
 async def get_download_Page(_url):
     href = _url.replace('photos', 'download')
-    html = await get_htmlAsync(href)
+    flag = int(0)
+    while flag < 100:
+        html = await get_htmlAsync(href)
+        if html is not None:
+            break
     patten = r'<a class="down_btn ads" href="(.*?)">'
     try:
         middle = re.findall(patten, html)
         ls = middle[0]
     except:
         print('Error with middle = '+str(middle))
+        print('the html is :'+html)
         ls = ''
     return 'https:' + ls
 
 
 async def get_htmlAsync(_url):
     async with aiohttp.ClientSession() as session:
-        async with session.get(_url, proxy=getproxies()['http']) as resp:
+        async with session.get(_url, proxy=getproxies()['https']) as resp:
+            await asyncio.sleep(99)
             return await resp.text()
 
 
@@ -130,4 +136,7 @@ async def main_thread(beg, end):
     print('耗时为'+str(round(time.time()-beg_time, 3))+'s')
 
 
-asyncio.run(main_thread(166, 266))
+def KissMe():
+    beg = int(input("请输入开始页数\n"))
+    end = int(input("请输入结束页数\n"))
+    asyncio.run(main_thread(beg, end))

@@ -1,9 +1,6 @@
-from hashlib import new
-from posixpath import split
-
 
 new_set = set()
-with open('./Mang_getUrl.txt', 'r', encoding='utf-8') as f:
+with open('./wnacg_total_comic.txt', 'r', encoding='utf-8') as f:
     ls = f.read().split('\n')
     for i in ls:
         new_set.add(i)

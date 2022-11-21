@@ -17,9 +17,12 @@ async def unique_file():
 
 
 async def get_htmlAsync(_url):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(_url, proxy=getproxies()['http']) as resp:
-            return await resp.text()
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(_url, proxy=getproxies()['https']) as resp:
+                return await resp.text()
+    except:
+        print("something error")
 
 # 获取所有套图的磁力链接
 async def get_1_url(uri):
@@ -65,7 +68,7 @@ async def get_all_Pages(beg,end):
 async def main_Thread():
     beg_time = time.time()
     fetch2get = []
-    all_pages = await get_all_Pages(1, 2)
+    all_pages = await get_all_Pages(8, )
     for page in all_pages:
         for one in page:
             fetch2get.append(get_1_url(one))
@@ -74,7 +77,7 @@ async def main_Thread():
     for i in mangs:
         for mang in i:
             sync_array.append(mang)
-    await write2files(sync_array, 'total'+'.txt')
+    await write2files(sync_array, './final_file2Save'+'.txt')
     print('耗时为'+str(round(time.time()-beg_time, 3))+'s')
 
 asyncio.get_event_loop().run_until_complete(main_Thread())
