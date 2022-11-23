@@ -12,7 +12,8 @@ from urllib.request import getproxies
 # 主网址
 base_url = 'http://www.wnacg.org'
 search_url = 'http://www.wnacg.org/search/?q='
-
+delay_time = 299
+retryNum = 100
 
 async def get_all_pages(begin, end, mode):
     ls = []
@@ -48,9 +49,10 @@ async def get_one_Page(_url):
 async def get_download_Page(_url):
     href = _url.replace('photos', 'download')
     flag = int(0)
-    while flag < 100:
+    while flag < retryNum:
         html = await get_htmlAsync(href)
-        if html is not None:
+        flag = flag + 1
+        if html is not (None or ''):
             break
     patten = r'<a class="down_btn ads" href="(.*?)">'
     try:
@@ -59,14 +61,15 @@ async def get_download_Page(_url):
     except:
         print('Error with middle = '+str(middle))
         print('the html is :'+html)
+        print('the type of html is', type(html))
         ls = ''
     return 'https:' + ls
 
 
 async def get_htmlAsync(_url):
     async with aiohttp.ClientSession() as session:
-        async with session.get(_url, proxy=getproxies()['https']) as resp:
-            await asyncio.sleep(99)
+        async with session.get(_url, proxy=getproxies()['http']) as resp:
+            await asyncio.sleep(delay_time)
             return await resp.text()
 
 
@@ -79,7 +82,6 @@ async def getTotal():
 async def writeDiff2tol(urls_list):
     async with aiofiles.open('wnacg_total_comic.txt', 'a+', encoding='utf-8') as f:
         ls = await getTotal()
-        # print(ls)
         for i in urls_list:
             if i in ls:
                 pass
